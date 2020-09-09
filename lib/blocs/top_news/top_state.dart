@@ -4,7 +4,7 @@ abstract class TopState extends Equatable {
   const TopState();
 }
 
-class TopInitial extends TopState {
+class TopNewsInitial extends TopState {
   @override
   List<Object> get props => [];
 }
@@ -17,7 +17,7 @@ class TopNewsLoading extends TopState {
 
 // ignore: must_be_immutable
 class TopNewsLoaded extends TopState {
-  ArticleModel news;
+  List<ArticleModel> news;
 
   TopNewsLoaded({this.news}) : assert(news != null);
 
@@ -27,7 +27,10 @@ class TopNewsLoaded extends TopState {
 }
 
 class TopNewsLoadError extends TopState {
+  final String message;
+
+  const TopNewsLoadError(this.message);
+
   @override
-  // TODO: implement props
-  List<Object> get props => [];
+  List<Object> get props => [message];
 }

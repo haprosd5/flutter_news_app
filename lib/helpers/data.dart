@@ -29,17 +29,16 @@ List<CategoryModel> getListCategory() {
   );
   cateList.add(
     new CategoryModel(
-        name: 'Travel',
+        name: 'Science',
         url:
             'https://images.unsplash.com/photo-1596972815676-44315ddc285f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80'),
   );
   cateList.add(
     new CategoryModel(
-        name: 'Nature',
+        name: 'Technology',
         url:
             'https://images.unsplash.com/photo-1598923096298-ddcb6a64798b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80'),
   );
-
 
   return cateList;
 }
