@@ -21,12 +21,11 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     CategoryEvent event,
   ) async* {
     // TODO Xử lý logic cho bloc
-    yield CategoryInitial();
     if (event is CategoryEventRequest) {
+      yield CategoryStateLoading();
       try {
-        yield CategoryStateLoading();
-        print(event.cateName);
-        final List<ArticleModel> cateList = await temp.getNewsCategory(cate: event.cateName);
+        final List<ArticleModel> cateList =
+            await temp.getNewsCategory(cate: event.cateName);
         yield CategoryStateLoaded(cateList: cateList);
       } on NetworkError {
         yield CategoryStateError('Load dữ liệu bị lỗi rồi');

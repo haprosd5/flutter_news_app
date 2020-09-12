@@ -6,19 +6,29 @@ import 'package:project_news_app/models/article_model.dart';
 import 'package:project_news_app/widgets/blog_title.dart';
 import 'package:project_news_app/widgets/build_initial_widget.dart';
 
+
+
 class CategoriesView extends StatefulWidget {
   final String categoryName;
 
   const CategoriesView({Key key, this.categoryName}) : super(key: key);
 
   @override
-  _CategoriesViewState createState() => _CategoriesViewState(categoryName: categoryName);
+  _CategoriesViewState createState() =>
+      _CategoriesViewState(categoryName: categoryName);
 }
 
 class _CategoriesViewState extends State<CategoriesView> {
   final String categoryName;
 
   _CategoriesViewState({this.categoryName});
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    BlocProvider.of<CategoryBloc>(context)
+        .add(CategoryEventRequest(mapToCategories(this.categoryName)));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +36,9 @@ class _CategoriesViewState extends State<CategoriesView> {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: Colors.blue),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
         elevation: 0,
         title: Row(
@@ -42,14 +54,13 @@ class _CategoriesViewState extends State<CategoriesView> {
       body: BlocBuilder<CategoryBloc, CategoryState>(
         builder: (context, state) {
           if (state is CategoryInitial) {
-            final name = mapToCategories(this.categoryName);
-            BlocProvider.of<CategoryBloc>(context)
-                .add(CategoryEventRequest(name));
+
             return InitialWidget();
           } else if (state is CategoryStateLoading) {
+            print('loading');
             return InitialWidget();
-          }
-          if (state is CategoryStateLoaded) {
+          } else if (state is CategoryStateLoaded) {
+            print('load success');
             return buildScreenHomeWithData(context, state.cateList);
           } else {
             return InitialWidget();
@@ -66,7 +77,8 @@ Widget buildScreenHomeWithData(BuildContext context, List<ArticleModel> news) {
     child: Container(
       child: Column(
         children: <Widget>[
-          /** Hiển thi tin tức nổi bật */
+          /**
+                * Hiển thi tin tức nổi bật */
           Container(
             child: ListView.builder(
                 padding: EdgeInsets.all(10.0),

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:project_news_app/blocs/categories/category_bloc.dart';
 import 'package:project_news_app/blocs/top_news/top_bloc.dart';
 import 'package:project_news_app/helpers/data.dart';
 import 'package:project_news_app/models/article_model.dart';
@@ -46,7 +47,8 @@ class _HomeState extends State<Home> {
         listener: (context, state) {
           if (state is TopNewsLoadError) {
             // ignore: missing_return
-            Scaffold.of(context).showSnackBar(SnackBar(content: Text(state.message)));
+            Scaffold.of(context)
+                .showSnackBar(SnackBar(content: Text(state.message)));
           }
         },
         child: BlocBuilder<TopBloc, TopState>(builder: (context, state) {
@@ -67,8 +69,8 @@ class _HomeState extends State<Home> {
   }
 }
 
-Widget buildScreenHomeWithData(
-    BuildContext context, List<ArticleModel> news, List<CategoryModel> cateList) {
+Widget buildScreenHomeWithData(BuildContext context, List<ArticleModel> news,
+    List<CategoryModel> cateList) {
   return SingleChildScrollView(
     child: Container(
       child: Column(
@@ -84,10 +86,19 @@ Widget buildScreenHomeWithData(
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    Navigator.of(context).push(
+/*                    Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (BuildContext context) =>
                             CategoriesView(categoryName: cateList[index].name),
+                      ),
+                    );*/
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => BlocProvider.value(
+                          value: BlocProvider.of<CategoryBloc>(context),
+                          child: CategoriesView(
+                              categoryName: cateList[index].name),
+                        ),
                       ),
                     );
                   },
