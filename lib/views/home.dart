@@ -7,6 +7,8 @@ import 'package:project_news_app/models/article_model.dart';
 import 'package:project_news_app/models/category_model.dart';
 import 'package:project_news_app/views/category_view.dart';
 import 'package:project_news_app/widgets/blog_title.dart';
+import 'package:project_news_app/widgets/build_initial_widget.dart';
+import 'package:project_news_app/widgets/cate_title.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -50,26 +52,19 @@ class _HomeState extends State<Home> {
         child: BlocBuilder<TopBloc, TopState>(builder: (context, state) {
           if (state is TopNewsInitial) {
             BlocProvider.of<TopBloc>(context).add(GetNewsEvent());
-            return buildInitial();
+            return InitialWidget();
           } else if (state is TopNewsLoading) {
-            return buildInitial();
+            return InitialWidget();
           } else if (state is TopNewsLoaded) {
             return buildScreenHomeWithData(context, state.news, this.cateList);
           } else {
-            return buildInitial();
+            return InitialWidget();
           }
         }),
       ),
       backgroundColor: Colors.white,
     );
   }
-}
-
-Widget buildInitial() {
-  return Container(
-    alignment: Alignment.center,
-    child: CircularProgressIndicator(),
-  );
 }
 
 Widget buildScreenHomeWithData(
@@ -88,11 +83,14 @@ Widget buildScreenHomeWithData(
               itemCount: cateList.length,
               itemBuilder: (context, index) {
                 return GestureDetector(
-                  onTap: () => Navigator.push(
-                      context,
+                  onTap: () {
+                    Navigator.of(context).push(
                       MaterialPageRoute(
-                          builder: (context) =>
-                              CategoriesView(categoryName: cateList[index].name))),
+                        builder: (BuildContext context) =>
+                            CategoriesView(categoryName: cateList[index].name),
+                      ),
+                    );
+                  },
                   child: CategoryTitle(
                     categoryName: cateList[index].name,
                     urlImage: cateList[index].url,
@@ -121,42 +119,4 @@ Widget buildScreenHomeWithData(
       ),
     ),
   );
-}
-
-class CategoryTitle extends StatelessWidget {
-  final String urlImage;
-  final String categoryName;
-
-  CategoryTitle({this.urlImage, this.categoryName});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(10),
-      child: Stack(
-        children: <Widget>[
-          ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(3)),
-            child: Image.network(
-              urlImage,
-              width: 120,
-              height: 60,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Container(
-            alignment: Alignment.center,
-            width: 120,
-            height: 60,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(3)), color: Colors.black45),
-            child: Text(
-              categoryName,
-              style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
-            ),
-          )
-        ],
-      ),
-    );
-  }
 }

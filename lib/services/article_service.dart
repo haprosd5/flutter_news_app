@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:project_news_app/models/article_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -32,10 +33,10 @@ class News {
     }
   }
 
-  Future<List<ArticleModel>> getNewsCategory(String cate) async {
+  Future<List<ArticleModel>> getNewsCategory({@required String cate, String country = 'us'}) async {
     List<ArticleModel> news = [];
     var response = await http.get(
-        'https://newsapi.org/v2/top-headlines?country=de&category=$cate&apiKey=ebe40e51702242b28b94b1fbd53f28c5');
+        'https://newsapi.org/v2/top-headlines?country=us&category=$cate&apiKey=ebe40e51702242b28b94b1fbd53f28c5');
     try {
       final result = jsonDecode(response.body);
       if (result['status'] == "ok") {
